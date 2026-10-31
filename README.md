@@ -8,19 +8,26 @@ SHA-256 and installed unmodified under `/app`.
 
 ## Install a prebuilt bundle
 
-Every push to `main` builds `MusicDL.flatpak` in GitHub Actions:
-
-1. Open the latest green run under **Actions → Flatpak**.
-2. Download the `MusicDL.flatpak` artifact.
-3. Install it:
+Every successful build is published to a rolling
+[**latest release**](https://github.com/youwebssik6789/musicdl-flatpak/releases/latest),
+so the download URL never changes:
 
 ```sh
+curl -LO https://github.com/youwebssik6789/musicdl-flatpak/releases/download/latest/MusicDL.flatpak
 flatpak install --user MusicDL.flatpak
 flatpak run io.github.deltaq471.musicdl
 ```
 
+Or download `MusicDL.flatpak` by hand from the release page. The release notes
+list the upstream commit it was built from, the build timestamp and the bundle's
+SHA-256, so you can check what you are installing.
+
 The runtime `org.freedesktop.Platform//25.08` is fetched from Flathub on first
 install.
+
+The same bundle is also attached to each Actions run as an artifact for 30 days,
+which is handy for going back to an older build. Artifact downloads need a
+GitHub login even though the repository is public.
 
 ## Build locally
 
@@ -68,11 +75,15 @@ The first build compiles Tcl 8.6.16 and Tk 8.6.16 from source, so expect
 2. If it differs from the pinned commit, the script downloads the tarball,
    computes its SHA-256, rewrites the `url`/`sha256` pair in the manifest, and
    commits as `github-actions[bot]`.
-3. The build job then produces a fresh `MusicDL.flatpak` artifact.
+3. The build job then produces a fresh `MusicDL.flatpak` and republishes the
+   `latest` release with it.
 
-Nothing is uploaded anywhere by default — the bundle is an Actions artifact.
-Tag pushes (`v*`) also attach it to a GitHub release. Artifact downloads need a
-GitHub login, even though the repository is public.
+The release is a single rolling one: the `latest` tag is force-moved to the
+commit each bundle was built from, and the `MusicDL.flatpak` asset is replaced
+in place, so there is always exactly one download link and no pile of old
+releases. Each Actions run also keeps its own `MusicDL.flatpak` artifact for 30
+days if you want an older build. Artifact downloads need a GitHub login, even
+though the repository is public.
 
 To check upstream immediately instead of waiting for the cron job, open
 **Actions → Flatpak → Run workflow** on `main`. That runs the update job first,

@@ -114,11 +114,41 @@ jobs:
           if-no-files-found: error
           retention-days: 30
 
-      - name: Attach bundle to release
-        if: startsWith(github.ref, 'refs/tags/')
+      # Every successful non-PR build republishes one rolling release, so users
+      # always have a stable URL:
+      #   https://github.com/youwebssik6789/musicdl-flatpak/releases/download/latest/MusicDL.flatpak
+      - name: Publish latest release
+        if: github.event_name != 'pull_request'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1 \
-            && gh release upload "$GITHUB_REF_NAME" MusicDL.flatpak --clobber \
-            || gh release create "$GITHUB_REF_NAME" MusicDL.flatpak --generate-notes
+          tag=latest
+          built=$(git rev-parse HEAD)
+          bundle_sha=$(sha256sum MusicDL.flatpak | cut -d' ' -f1)
+          bundle_bytes=$(stat -c%s MusicDL.flatpak)
+          upstream=$(python3 -c "import json;m=json.load(open('io.github.deltaq471.musicdl.json'));print(m['modules'][-1]['sources'][0]['url'].rsplit('/',1)[1].removesuffix('.tar.gz'))")
+
+          {
+            printf 'Automated Flatpak build of musicdl, republished on every change.\n\n'
+            printf -- '- musicdl source: [%s](https://github.com/deltaq471/musicdl/commit/%s)\n' "${upstream:0:7}" "$upstream"
+            printf -- '- packaging commit: %s\n' "$built"
+            printf -- '- built: %s\n' "$(date -u +'%Y-%m-%d %H:%M UTC')"
+            printf -- '- size: %s bytes\n' "$bundle_bytes"
+            printf -- '- sha256: %s\n\n' "$bundle_sha"
+            printf 'Install:\n\n'
+            printf '```sh\n'
+            printf 'flatpak install --user MusicDL.flatpak\n'
+            printf 'flatpak run io.github.deltaq471.musicdl\n'
+            printf '```\n'
+          } > /tmp/notes.md
+
+          gh release view "$tag" >/dev/null 2>&1 \
+            || gh release create "$tag" --target "$built" \
+                 --title "MusicDL Flatpak" --notes-file /tmp/notes.md
+          gh release upload "$tag" MusicDL.flatpak --clobber
+          gh release edit "$tag" --title "MusicDL Flatpak" \
+            --notes-file /tmp/notes.md --latest
+
+          # keep the tag on the exact source commit the asset was built from
+          git tag -f "$tag" "$built"
+          git push -f origin "refs/tags/$tag"
