@@ -137,6 +137,9 @@ a portal.
 - yt-dlp is vendored from a pinned wheel so builds never need PyPI access, but
   that also means the bundled yt-dlp goes stale until `yt-dlp.json` is bumped.
 - Only the SVG icon is committed; the PNGs are rendered during the build.
+- The `latest` release is rolled over, not appended to: its asset is replaced on
+  every successful build and its tag is force-moved to the commit that produced
+  the bundle. Old builds remain available as per-run Actions artifacts.
 - Packaging only. Nothing here audits the app: upstream still retries HTTPS
   requests with certificate verification disabled if a certificate error
   occurs, and the sandbox is what limits the damage. Do not open files you did
