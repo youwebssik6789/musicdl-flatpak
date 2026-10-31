@@ -4,6 +4,10 @@
   "runtime-version": "25.08",
   "sdk": "org.freedesktop.Sdk",
   "command": "musicdl",
+  "build-options": {
+    "no-debuginfo": true,
+    "no-debuginfo-compression": true
+  },
   "cleanup": [
     "/include",
     "/lib/*.a",
