@@ -31,7 +31,7 @@ jobs:
       changed: ${{ steps.pin.outputs.changed }}
       sha: ${{ steps.pin.outputs.sha }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Update source pin
         id: pin
         env:
@@ -53,7 +53,7 @@ jobs:
       # On schedule/dispatch github.sha is the commit from when the run was
       # queued, which is older than the pin the update job may just have
       # committed. Resolve the branch tip instead so we build what was pushed.
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
         with:
           ref: ${{ github.event.pull_request.head.sha || github.ref_name }}
 
@@ -67,7 +67,7 @@ jobs:
           fi
 
       - name: Cache runtimes and downloads
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             ~/.local/share/flatpak
@@ -107,7 +107,7 @@ jobs:
           sha256sum MusicDL.flatpak | tee -a "$GITHUB_STEP_SUMMARY"
 
       - name: Upload bundle
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: MusicDL.flatpak
           path: MusicDL.flatpak
