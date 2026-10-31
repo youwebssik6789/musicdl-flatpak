@@ -58,8 +58,8 @@
       "sources": [
         {
           "type": "archive",
-          "url": "https://github.com/deltaq471/musicdl/archive/d593ebb83ae2b61c22483e169d3cd37e623e5120.tar.gz",
-          "sha256": "5a1e57e1507926fdd9646f5db246fd64538dfbae5c7973ad11f0ff87f172e252",
+          "url": "https://github.com/deltaq471/musicdl/archive/d78e02cf8b8ce34aa49475db5cc22f388c46bb74.tar.gz",
+          "sha256": "4d3464810d4335896f29203cfd5bb779db583c7a7f34e4b947d0538c128c443d",
           "dest": "musicdl-src"
         },
         {
