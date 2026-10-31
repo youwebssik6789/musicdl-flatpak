@@ -101,10 +101,17 @@ jobs:
           flatpak --user install -y --noninteractive MusicDL.flatpak
           flatpak run --command=python3 io.github.deltaq471.musicdl -c \
             "import tkinter, yt_dlp; print('tk', tkinter.TkVersion, 'yt-dlp', yt_dlp.version.__version__)"
-          # the redistributed upstream code must carry its license
-          flatpak run --command=sh io.github.deltaq471.musicdl -c \
-            'test -s /app/share/licenses/io.github.deltaq471.musicdl/LICENSE \
-              && echo "upstream Apache-2.0 license shipped"'
+          # every redistributed component must carry its license text
+          flatpak run --command=sh io.github.deltaq471.musicdl -c '
+            for f in /app/share/licenses/io.github.deltaq471.musicdl/LICENSE \
+                     /app/share/licenses/tcl/license.terms \
+                     /app/share/licenses/tk/license.terms \
+                     /app/share/licenses/zlib/LICENSE \
+                     /app/share/licenses/libtommath/LICENSE \
+                     /app/share/licenses/python/LICENSE; do
+              test -s "$f" || { echo "missing license: $f"; exit 1; }
+            done
+            echo "all bundled licenses present"'
 
       - name: Summarise
         run: |

@@ -16,6 +16,9 @@
     "install-libraries",
     "install-headers"
   ],
+  "post-install": [
+    "install -Dm644 ../license.terms /app/share/licenses/tk/license.terms"
+  ],
   "sources": [
     {
       "type": "archive",

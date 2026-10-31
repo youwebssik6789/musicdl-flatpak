@@ -5,6 +5,11 @@
   "config-opts": [
     "--prefix=/app"
   ],
+  "post-install": [
+    "install -Dm644 ../license.terms /app/share/licenses/tcl/license.terms",
+    "install -Dm644 ../compat/zlib/LICENSE /app/share/licenses/zlib/LICENSE",
+    "install -Dm644 ../libtommath/LICENSE /app/share/licenses/libtommath/LICENSE"
+  ],
   "sources": [
     {
       "type": "archive",

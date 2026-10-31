@@ -155,7 +155,20 @@ update scripts, desktop integration and icon source — is licensed under the
 attribution.
 
 The application itself is [deltaq471/musicdl](https://github.com/deltaq471/musicdl),
-also Apache-2.0, © its author. It is built from an unmodified upstream tarball,
-and its license text is installed into the bundle at
-`/app/share/licenses/io.github.deltaq471.musicdl/LICENSE` — the build fails if
-that file is missing.
+also Apache-2.0, © its author. It is built from an unmodified upstream tarball.
+
+Because the bundle redistributes code written by others, it carries every
+license text it owes, all under `/app/share/licenses`:
+
+| Path | Component | License |
+| --- | --- | --- |
+| `io.github.deltaq471.musicdl/LICENSE` | musicdl itself | Apache-2.0 |
+| `tcl/license.terms` | Tcl 8.6.16 | BSD-style |
+| `tk/license.terms` | Tk 8.6.16 | BSD-style |
+| `zlib/LICENSE` | zlib, vendored in Tcl | zlib |
+| `libtommath/LICENSE` | libtommath, vendored in Tcl | public domain |
+| `python/LICENSE` | CPython `tkinter` + `_tkinter` | PSF-2.0 |
+| `.../yt_dlp-*.dist-info/licenses/LICENSE` | yt-dlp | Unlicense |
+
+The CI smoke test checks each of these files after installing the bundle, so a
+missing license fails the build instead of shipping quietly.
