@@ -1,0 +1,107 @@
+name: Flatpak
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    # daily: pick up new musicdl commits, then rebuild
+    - cron: "17 4 * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: flatpak-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  update-upstream:
+    name: Pin latest musicdl commit
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.pin.outputs.changed }}
+      sha: ${{ steps.pin.outputs.sha }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Update source pin
+        id: pin
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          python3 scripts/update-upstream.py
+
+  build:
+    name: Build bundle
+    needs: [update-upstream]
+    if: |
+      always() &&
+      needs.update-upstream.result != 'failure' &&
+      needs.update-upstream.result != 'cancelled'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install build tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y flatpak flatpak-builder librsvg2-bin
+          # Ubuntu 24.04+ restricts unprivileged user namespaces, which bwrap needs
+          if [ -e /proc/sys/kernel/apparmor_restrict_unprivileged_userns ]; then
+            sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+          fi
+
+      - name: Cache runtimes and downloads
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.local/share/flatpak
+            .flatpak-builder/downloads
+          key: flatpak-${{ runner.os }}-${{ hashFiles('*.json') }}
+          restore-keys: |
+            flatpak-${{ runner.os }}-
+
+      - name: Install runtime and SDK
+        run: |
+          flatpak --user remote-add --if-not-exists flathub \
+            https://dl.flathub.org/repo/flathub.flatpakrepo
+          flatpak --user install -y --noninteractive flathub \
+            org.freedesktop.Platform//25.08 org.freedesktop.Sdk//25.08
+
+      - name: Build
+        env:
+          FLATPAK_BUILDER_ARGS: --disable-rofiles-fuse
+        run: sh scripts/build.sh
+
+      - name: Smoke test the bundle
+        run: |
+          flatpak --user install -y --noninteractive MusicDL.flatpak
+          flatpak run --command=python3 io.github.deltaq471.musicdl -c \
+            "import tkinter, yt_dlp; print('tk', tkinter.TkVersion, 'yt-dlp', yt_dlp.version.__version__)"
+
+      - name: Summarise
+        run: |
+          ls -lh MusicDL.flatpak
+          sha256sum MusicDL.flatpak | tee -a "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: MusicDL.flatpak
+          path: MusicDL.flatpak
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Attach bundle to release
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1 \
+            && gh release upload "$GITHUB_REF_NAME" MusicDL.flatpak --clobber \
+            || gh release create "$GITHUB_REF_NAME" MusicDL.flatpak --generate-notes

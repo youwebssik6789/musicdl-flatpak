@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Music DL
+GenericName=Music Downloader
+Comment=Download music from YouTube, SoundCloud and Spotify
+Exec=musicdl
+Icon=io.github.deltaq471.musicdl
+Terminal=false
+Type=Application
+Categories=AudioVideo;
+Keywords=music;download;youtube;soundcloud;spotify;
+StartupNotify=true

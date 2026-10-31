@@ -1,0 +1,18 @@
+{
+  "name": "python-tkinter",
+  "buildsystem": "simple",
+  "build-commands": [
+    "gcc -shared -fPIC -O2 -I/app/include -I/usr/include/python3.13/internal $(python3-config --includes) -o _tkinter.so Modules/_tkinter.c -L/app/lib -Wl,-rpath,/app/lib -ltk8.6 -ltcl8.6 -lX11 -lXss -lutil -lpthread -ldl -lm",
+    "install -d /app/lib/python3.13/site-packages",
+    "install -m755 _tkinter.so /app/lib/python3.13/site-packages/_tkinter.so",
+    "cp -r Lib/tkinter /app/lib/python3.13/site-packages/tkinter",
+    "python3 -c \"import tkinter; print('Tk', tkinter.TkVersion, 'loaded from', tkinter.__file__)\""
+  ],
+  "sources": [
+    {
+      "type": "archive",
+      "url": "https://www.python.org/ftp/python/3.13.16/Python-3.13.16.tar.xz",
+      "sha256": "f4b1bfb3c79b5bb11b8d228a12504163b4c0dab4d679828d8f5f26b6cb6ab35d"
+    }
+  ]
+}

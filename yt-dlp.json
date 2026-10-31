@@ -1,0 +1,20 @@
+{
+  "name": "yt-dlp",
+  "buildsystem": "simple",
+  "build-commands": [
+    "install -d /app/lib/python3.13/site-packages",
+    "python3 -m zipfile -e yt_dlp.whl /app/lib/python3.13/site-packages",
+    "python3 -c \"import yt_dlp; print('yt-dlp', yt_dlp.version.__version__)\"",
+    "install -d /app/bin",
+    "printf '#!/bin/sh\\nexec python3 -m yt_dlp \\\"$@\\\"\\n' > /app/bin/yt-dlp",
+    "chmod 755 /app/bin/yt-dlp"
+  ],
+  "sources": [
+    {
+      "type": "file",
+      "url": "https://files.pythonhosted.org/packages/7f/3d/16ea7d5638cf585991f2c5705e8083688dde633d32d0871f2404e0f4d827/yt_dlp-2026.10.26-py3-none-any.whl",
+      "sha256": "a05c5b5d8562f7e8a62f5334348b406af4930d56d3a65f8021d14af0e22339ae",
+      "dest-filename": "yt_dlp.whl"
+    }
+  ]
+}

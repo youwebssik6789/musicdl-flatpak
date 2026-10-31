@@ -1,0 +1,26 @@
+{
+  "name": "tk",
+  "buildsystem": "autotools",
+  "subdir": "unix",
+  "config-opts": [
+    "--prefix=/app",
+    "--with-tcl=/app/lib",
+    "--enable-xft"
+  ],
+  "make-args": [
+    "binaries",
+    "libraries"
+  ],
+  "make-install-args": [
+    "install-binaries",
+    "install-libraries",
+    "install-headers"
+  ],
+  "sources": [
+    {
+      "type": "archive",
+      "url": "https://github.com/tcltk/tk/archive/refs/tags/core-8-6-16.tar.gz",
+      "sha256": "8cef8214ce158ca62b05bc9e714d2db90aa37eb478679a22135b51386879fda6"
+    }
+  ]
+}

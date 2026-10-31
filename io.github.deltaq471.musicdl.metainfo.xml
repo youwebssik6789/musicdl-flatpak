@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.deltaq471.musicdl</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>Apache-2.0</project_license>
+  <name>Music DL</name>
+  <summary>Download music from YouTube, SoundCloud and Spotify</summary>
+  <description>
+    <p>
+      Music DL is a small desktop app that downloads audio from YouTube,
+      SoundCloud and Spotify and saves it in the format of your choice.
+    </p>
+    <p>
+      Paste one or more links, pick an output folder and format, and the app
+      queues the downloads. Playlists and albums are expanded automatically,
+      and tracks can be tagged with title, artist, album and cover art.
+    </p>
+    <p>
+      Spotify links are matched to the best available audio on YouTube, since
+      Spotify does not provide public audio streams.
+    </p>
+  </description>
+  <launchable type="desktop-id">io.github.deltaq471.musicdl.desktop</launchable>
+  <url type="homepage">https://github.com/deltaq471/musicdl</url>
+  <url type="bugtracker">https://github.com/deltaq471/musicdl/issues</url>
+  <developer id="io.github.deltaq471">
+    <name>deltaq471</name>
+  </developer>
+  <content_rating type="oars-1.1"/>
+  <releases>
+    <release version="5.0" date="2026-09-12"/>
+  </releases>
+</component>

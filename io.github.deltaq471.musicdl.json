@@ -1,0 +1,84 @@
+{
+  "app-id": "io.github.deltaq471.musicdl",
+  "runtime": "org.freedesktop.Platform",
+  "runtime-version": "25.08",
+  "sdk": "org.freedesktop.Sdk",
+  "command": "musicdl",
+  "cleanup": [
+    "/include",
+    "/lib/*.a",
+    "/lib/*.la",
+    "/lib/pkgconfig",
+    "/share/man",
+    "/share/aclocal",
+    "/bin/tclsh8.6",
+    "/bin/wish8.6"
+  ],
+  "finish-args": [
+    "--share=network",
+    "--share=ipc",
+    "--socket=x11",
+    "--filesystem=~/Downloads/Music:create",
+    "--talk-name=org.freedesktop.portal.Desktop",
+    "--talk-name=org.freedesktop.portal.OpenURI"
+  ],
+  "modules": [
+    "tcl.json",
+    "tk.json",
+    "python-tkinter.json",
+    "yt-dlp.json",
+    {
+      "name": "musicdl",
+      "buildsystem": "simple",
+      "build-commands": [
+        "install -d /app/bin /app/share/musicdl",
+        "install -d /app/share/applications /app/share/metainfo",
+        "install -d /app/share/icons/hicolor/128x128/apps /app/share/icons/hicolor/256x256/apps",
+        "install -m644 musicdl-src/downloader_gui.py /app/share/musicdl/downloader_gui.py",
+        "install -m755 musicdl.sh /app/bin/musicdl",
+        "install -m644 io.github.deltaq471.musicdl.desktop /app/share/applications/",
+        "install -m644 io.github.deltaq471.musicdl.metainfo.xml /app/share/metainfo/",
+        "install -m644 io.github.deltaq471.musicdl.png /app/share/icons/hicolor/128x128/apps/",
+        "install -m644 io.github.deltaq471.musicdl-256.png /app/share/icons/hicolor/256x256/apps/io.github.deltaq471.musicdl.png"
+      ],
+      "cleanup": [
+        "/include",
+        "/lib/*.a",
+        "/lib/*.la",
+        "/lib/pkgconfig",
+        "/share/man",
+        "/share/aclocal",
+        "/bin/tclsh8.6",
+        "/bin/wish8.6"
+      ],
+      "sources": [
+        {
+          "type": "archive",
+          "url": "https://github.com/deltaq471/musicdl/archive/d78e02cf8b8ce34aa49475db5cc22f388c46bb74.tar.gz",
+          "sha256": "4d3464810d4335896f29203cfd5bb779db583c7a7f34e4b947d0538c128c443d",
+          "dest": "musicdl-src"
+        },
+        {
+          "type": "file",
+          "path": "musicdl.sh"
+        },
+        {
+          "type": "file",
+          "path": "io.github.deltaq471.musicdl.desktop"
+        },
+        {
+          "type": "file",
+          "path": "io.github.deltaq471.musicdl.metainfo.xml"
+        },
+        {
+          "type": "file",
+          "path": "io.github.deltaq471.musicdl.png"
+        },
+        {
+          "type": "file",
+          "path": "io.github.deltaq471.musicdl-256.png"
+        }
+      ]
+    }
+  ]
+}
