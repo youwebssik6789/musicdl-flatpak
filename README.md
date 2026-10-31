@@ -128,6 +128,7 @@ a portal.
 | `scripts/build.sh` | local/CI build entry point |
 | `scripts/render-icons.sh` | renders the PNG icons from the SVG |
 | `scripts/update-upstream.py` | moves the source pin to upstream HEAD |
+| `LICENSE`, `NOTICE` | Apache-2.0 license text and attribution |
 
 ## Notes
 
@@ -144,5 +145,17 @@ a portal.
   requests with certificate verification disabled if a certificate error
   occurs, and the sandbox is what limits the damage. Do not open files you did
   not expect to download.
-- The bundled app is Apache-2.0, © the upstream author; these packaging files
-  are provided as-is.
+
+## License
+
+The packaging in this repository — manifest, module definitions, build and
+update scripts, desktop integration and icon source — is licensed under the
+[Apache License 2.0](LICENSE). Each script carries an
+`SPDX-License-Identifier: Apache-2.0` tag, and [NOTICE](NOTICE) holds the
+attribution.
+
+The application itself is [deltaq471/musicdl](https://github.com/deltaq471/musicdl),
+also Apache-2.0, © its author. It is built from an unmodified upstream tarball,
+and its license text is installed into the bundle at
+`/app/share/licenses/io.github.deltaq471.musicdl/LICENSE` — the build fails if
+that file is missing.

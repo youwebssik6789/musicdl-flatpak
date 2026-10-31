@@ -1,4 +1,5 @@
 #!/bin/sh
+# SPDX-License-Identifier: Apache-2.0
 # Build MusicDL.flatpak from source. See README.md for prerequisites.
 set -eu
 

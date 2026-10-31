@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 name: Flatpak
 
 on:
@@ -100,6 +101,10 @@ jobs:
           flatpak --user install -y --noninteractive MusicDL.flatpak
           flatpak run --command=python3 io.github.deltaq471.musicdl -c \
             "import tkinter, yt_dlp; print('tk', tkinter.TkVersion, 'yt-dlp', yt_dlp.version.__version__)"
+          # the redistributed upstream code must carry its license
+          flatpak run --command=sh io.github.deltaq471.musicdl -c \
+            'test -s /app/share/licenses/io.github.deltaq471.musicdl/LICENSE \
+              && echo "upstream Apache-2.0 license shipped"'
 
       - name: Summarise
         run: |

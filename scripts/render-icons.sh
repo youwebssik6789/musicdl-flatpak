@@ -1,4 +1,5 @@
 #!/bin/sh
+# SPDX-License-Identifier: Apache-2.0
 # Render the PNG icons the manifest installs from the committed SVG.
 # The PNGs are generated, not committed, so this must run before flatpak-builder.
 set -eu

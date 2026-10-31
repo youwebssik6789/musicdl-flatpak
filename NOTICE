@@ -1,0 +1,11 @@
+MusicDL Flatpak packaging
+Copyright 2026 youwebssik6789
+
+The packaging files in this repository (manifest, module definitions, build and
+update scripts, desktop integration and icon source) are licensed under the
+Apache License, Version 2.0. See LICENSE.
+
+This packaging builds and redistributes MusicDL, developed by deltaq471
+(https://github.com/deltaq471/musicdl), which is also licensed under the Apache
+License, Version 2.0. The upstream license text is installed into the bundle at
+share/licenses/io.github.deltaq471.musicdl/LICENSE.

@@ -38,6 +38,8 @@
         "install -d /app/bin /app/share/musicdl",
         "install -d /app/share/applications /app/share/metainfo",
         "install -d /app/share/icons/hicolor/128x128/apps /app/share/icons/hicolor/256x256/apps",
+        "install -d /app/share/licenses/io.github.deltaq471.musicdl",
+        "install -m644 musicdl-src/LICENSE /app/share/licenses/io.github.deltaq471.musicdl/LICENSE",
         "install -m644 musicdl-src/downloader_gui.py /app/share/musicdl/downloader_gui.py",
         "install -m755 musicdl.sh /app/bin/musicdl",
         "install -m644 io.github.deltaq471.musicdl.desktop /app/share/applications/",

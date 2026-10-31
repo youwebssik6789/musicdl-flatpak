@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: Apache-2.0
 """Pin the manifest to the newest commit of deltaq471/musicdl.
 
 Used by the daily GitHub Actions run, but works locally too:
