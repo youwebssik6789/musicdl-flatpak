@@ -71,7 +71,12 @@ The first build compiles Tcl 8.6.16 and Tk 8.6.16 from source, so expect
 3. The build job then produces a fresh `MusicDL.flatpak` artifact.
 
 Nothing is uploaded anywhere by default — the bundle is an Actions artifact.
-Tag pushes (`v*`) also attach it to a GitHub release.
+Tag pushes (`v*`) also attach it to a GitHub release. Artifact downloads need a
+GitHub login, even though the repository is public.
+
+To check upstream immediately instead of waiting for the cron job, open
+**Actions → Flatpak → Run workflow** on `main`. That runs the update job first,
+and the build job in the same run picks up whatever it pushed.
 
 Manual bump, without CI:
 
