@@ -2,10 +2,10 @@
 # SPDX-License-Identifier: Apache-2.0
 """Check that LICENSE is still the Apache License 2.0, word for word.
 
-The appendix at the end of the license is Apache's template: its copyright
-line may be left as the placeholder or filled in with the copyright holder, so
-that one line is normalised before hashing. Everything else has to match
-apache.org's LICENSE-2.0.txt exactly.
+The appendix at the end of the license is Apache's template and is not part of
+the terms: it stays as the placeholder, and the copyright holder is named in
+NOTICE instead. The text must match apache.org's LICENSE-2.0.txt exactly,
+ignoring only whitespace and line endings.
 
 Run it directly:
 
@@ -17,16 +17,13 @@ from __future__ import annotations
 
 import hashlib
 import pathlib
-import re
 import sys
 
 # sha256 of the normalised canonical text (see normalise() below)
-EXPECTED_SHA256 = "53cd3a09cf95d164718c7358ef681fc59ff2cff1cb1f16463e84069620801e40"
+EXPECTED_SHA256 = "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
 
 LICENSE = pathlib.Path("LICENSE")
 
-# only the example line in the appendix starts with "Copyright"
-COPYRIGHT_LINE = re.compile(r"^\s*Copyright\s+\S.*$")
 COPYRIGHT_PLACEHOLDER = "   Copyright [yyyy] [name of copyright owner]"
 
 REQUIRED = [
@@ -46,8 +43,8 @@ REQUIRED = [
 
 
 def normalise(text: str) -> str:
-    """Drop differences that carry no meaning: CRLF, trailing spaces, blank
-    lines at either end, and whatever the appendix copyright line says."""
+    """Drop differences that carry no meaning: CRLF, trailing spaces and blank
+    lines at either end."""
     lines = text.replace("\r\n", "\n").replace("\r", "\n").split("\n")
     lines = [line.rstrip() for line in lines]
 
@@ -56,10 +53,6 @@ def normalise(text: str) -> str:
     while lines and not lines[-1].strip():
         lines.pop()
 
-    lines = [
-        "   Copyright <holder>" if COPYRIGHT_LINE.match(line) else line
-        for line in lines
-    ]
     return "\n".join(lines) + "\n"
 
 
@@ -73,11 +66,11 @@ def main() -> int:
 
     problems = [f"missing: {needle}" for needle in REQUIRED if needle not in text]
 
-    appendix = [
-        line for line in text.split("\n") if line.startswith("   Copyright ")
-    ]
-    if not appendix:
-        problems.append("missing the appendix copyright line")
+    if COPYRIGHT_PLACEHOLDER not in text:
+        problems.append(
+            "the appendix copyright line must stay as Apache's placeholder "
+            "(name the copyright holder in NOTICE instead)"
+        )
 
     digest = hashlib.sha256(text.encode()).hexdigest()
     if digest != EXPECTED_SHA256:
@@ -102,8 +95,6 @@ def main() -> int:
         f"LICENSE matches the canonical Apache License 2.0 "
         f"({len(raw.encode('utf-8'))} bytes)"
     )
-    if COPYRIGHT_PLACEHOLDER not in raw:
-        print("note: the appendix copyright line is filled in")
     return 0
 
 
