@@ -8,7 +8,7 @@ SHA-256 and installed unmodified under `/app`.
 
 ## Install a prebuilt bundle
 
-Every successful build is published to a rolling
+Every successful build from `main` is published to a rolling
 [**latest release**](https://github.com/youwebssik6789/musicdl-flatpak/releases/latest),
 so the download URL never changes:
 
@@ -138,6 +138,9 @@ a portal.
 - yt-dlp is vendored from a pinned wheel so builds never need PyPI access, but
   that also means the bundled yt-dlp goes stale until `yt-dlp.json` is bumped.
 - Only the SVG icon is committed; the PNGs are rendered during the build.
+- The sandbox `$HOME` is temporary, so `/app/bin/musicdl` symlinks upstream's
+  `~/.sc_dl.json` and `~/.sc_cid` into the app's persistent config directory.
+  Settings and the SoundCloud client-ID cache therefore survive restarts.
 - The `latest` release is rolled over, not appended to: its asset is replaced on
   every successful build and its tag is force-moved to the commit that produced
   the bundle. Old builds remain available as per-run Actions artifacts.

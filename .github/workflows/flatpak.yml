@@ -4,7 +4,6 @@ name: Flatpak
 on:
   push:
     branches: [main]
-    tags: ["v*"]
   pull_request:
   workflow_dispatch:
   schedule:
@@ -130,7 +129,7 @@ jobs:
       # always have a stable URL:
       #   https://github.com/youwebssik6789/musicdl-flatpak/releases/download/latest/MusicDL.flatpak
       - name: Publish latest release
-        if: github.event_name != 'pull_request'
+        if: github.event_name != 'pull_request' && github.ref_name == 'main'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
