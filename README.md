@@ -128,7 +128,6 @@ a portal.
 | `scripts/build.sh` | local/CI build entry point |
 | `scripts/render-icons.sh` | renders the PNG icons from the SVG |
 | `scripts/update-upstream.py` | moves the source pin to upstream HEAD |
-| `scripts/check-license.py` | fails if `LICENSE` stops being the exact Apache-2.0 text |
 | `LICENSE`, `NOTICE` | Apache-2.0 license text and attribution |
 
 ## Notes
@@ -154,12 +153,6 @@ update scripts, desktop integration and icon source — is licensed under the
 [Apache License 2.0](LICENSE). Each script carries an
 `SPDX-License-Identifier: Apache-2.0` tag, and [NOTICE](NOTICE) holds the
 attribution.
-
-`LICENSE` is Apache's canonical text, including its appendix template; the
-copyright holder is named in `NOTICE`, not in the license body. A CI job
-(`Check license text`) hashes `LICENSE` and fails the run if it has drifted
-from the canonical wording — catching emptied files, truncated text, or a
-different license pasted in by mistake.
 
 The application itself is [deltaq471/musicdl](https://github.com/deltaq471/musicdl),
 also Apache-2.0, © its author. It is built from an unmodified upstream tarball.
