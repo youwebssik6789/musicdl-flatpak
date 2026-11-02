@@ -14,6 +14,7 @@
     "/lib/*.la",
     "/lib/pkgconfig",
     "/share/man",
+    "/man",
     "/share/aclocal",
     "/bin/tclsh8.6",
     "/bin/wish8.6"
